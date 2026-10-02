@@ -1,0 +1,1933 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Terrenos Juana Koslay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* Layout: una columna de celular, header pegado arriba con el resumen, fichas de lote apiladas, barra de pestañas abajo. */
+:root{
+  --bg:#eef1ec; --surface:#ffffff; --sunk:#e4e9e2; --ink:#18201c; --muted:#56635b; --line:#d5ddd4;
+  --accent:#2c6a4c; --accent-ink:#ffffff; --accent-soft:#d8eadf;
+  --ok:#24734a; --ok-soft:#dcefe3; --info:#33608a; --info-soft:#e0eaf4;
+  --warn:#93590b; --warn-soft:#f6e9d2; --bad:#a83333; --bad-soft:#f6dede;
+  --star:#c58a12;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101412; --surface:#181e1b; --sunk:#202824; --ink:#e6ece7; --muted:#9aa89f; --line:#2b3530;
+  --accent:#6cc497; --accent-ink:#0b1a12; --accent-soft:#1f3a2c;
+  --ok:#6cc58c; --ok-soft:#1c3326; --info:#8bb6dd; --info-soft:#1c2b3a;
+  --warn:#e3ab4f; --warn-soft:#3a2c14; --bad:#ef8484; --bad-soft:#3d1f1f;
+  --star:#f0bd4a; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#101412; --surface:#181e1b; --sunk:#202824; --ink:#e6ece7; --muted:#9aa89f; --line:#2b3530;
+  --accent:#6cc497; --accent-ink:#0b1a12; --accent-soft:#1f3a2c;
+  --ok:#6cc58c; --ok-soft:#1c3326; --info:#8bb6dd; --info-soft:#1c2b3a;
+  --warn:#e3ab4f; --warn-soft:#3a2c14; --bad:#ef8484; --bad-soft:#3d1f1f;
+  --star:#f0bd4a; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+.app{max-width:540px;margin:0 auto;padding-inline:16px;padding-block:0 calc(84px + env(safe-area-inset-bottom,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0}
+button,input,textarea,select{font:inherit;color:inherit}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* Header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:14px 10px;border-bottom:1px solid var(--line);margin-inline:-16px;padding-inline:16px}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top h1{font-size:24px;font-weight:800;letter-spacing:-.01em}
+.sync{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.sync::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.sync[data-s="nube"]::before{background:var(--ok)}
+.sync[data-s="local"]::before{background:var(--warn)}
+.sync[data-s="error"]::before{background:var(--bad)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:6px 8px;min-width:0}
+.stat b{display:block;font-family:var(--f-display);font-size:20px;line-height:1.1}
+.stat span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+/* Filtros */
+.bar{display:flex;gap:8px;overflow-x:auto;padding-block:12px 4px;scrollbar-width:none;margin-inline:-16px;padding-inline:16px}
+.bar::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 13px;font-size:14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sortrow{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;color:var(--muted);padding-block:6px 10px}
+.sortrow select{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:14px}
+
+/* Fichas */
+.list{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0;scroll-margin-top:150px}
+.card.is-visited{border-color:var(--accent)}
+.card.is-no{opacity:.62}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.head > div{min-width:0}
+.head h2{font-size:18px;font-weight:600;line-height:1.2}
+.zona{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.price{text-align:right;flex:none;max-width:48%}
+.price b{display:block;font-family:var(--f-display);font-size:19px;font-weight:800;line-height:1.15}
+.price small{display:block;font-size:12px;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12px;border-radius:6px;padding:2px 8px;background:var(--sunk);color:var(--muted)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.tag.acc{background:var(--accent-soft);color:var(--accent)}
+.svc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:0;padding:0;list-style:none}
+.svc li{display:flex;justify-content:space-between;gap:6px;align-items:center;border-radius:8px;padding:6px 9px;font-size:14px;background:var(--sunk)}
+.svc li em{font-style:normal;font-size:12px;font-weight:700}
+.svc .ok{background:var(--ok-soft)} .svc .ok em{color:var(--ok)}
+.svc .info{background:var(--info-soft)} .svc .info em{color:var(--info)}
+.svc .warn{background:var(--warn-soft)} .svc .warn em{color:var(--warn)}
+.svc .bad{background:var(--bad-soft)} .svc .bad em{color:var(--bad)}
+.svc .muted em{color:var(--muted)}
+.desc{margin:0;font-size:15px}
+.alerts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+.alerts li{font-size:14px;color:var(--warn);padding-left:18px;position:relative}
+.alerts li::before{content:"!";position:absolute;left:0;top:1px;width:13px;height:13px;border-radius:50%;background:var(--warn);color:var(--surface);font-size:10px;font-weight:700;display:grid;place-items:center}
+.contact{border-top:1px dashed var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.contact .who{font-weight:700}
+.contact .via{color:var(--muted)}
+.phone{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.phone code{font-family:var(--f-body);font-size:16px;font-weight:700;user-select:all}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:8px 13px;border-radius:10px;border:1px solid var(--line);background:var(--surface);text-decoration:none;color:var(--ink);font-size:14px;font-weight:700;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.small{min-height:32px;padding:4px 10px;font-size:13px}
+.btn svg{width:16px;height:16px;flex:none}
+
+/* Evaluación */
+.eval{background:var(--sunk);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.lbl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.visit{display:flex;align-items:center;gap:10px;font-weight:700;cursor:pointer}
+.visit input{width:24px;height:24px;accent-color:var(--accent)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:7px 16px;font-weight:700;cursor:pointer;min-height:38px}
+.seg button + button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"][data-v="si"]{background:var(--ok);color:var(--surface)}
+.seg button[aria-pressed="true"][data-v="no"]{background:var(--bad);color:var(--surface)}
+.stars{display:inline-flex;gap:2px}
+.stars button{border:0;background:transparent;font-size:28px;line-height:1;padding:2px 3px;cursor:pointer;color:var(--line)}
+.stars button.on{color:var(--star)}
+.eval textarea{width:100%;min-height:72px;resize:vertical;border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:var(--surface);font-size:16px}
+.loc{display:flex;gap:6px}
+.loc input{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface);font-size:15px}
+.hint{font-size:12px;color:var(--muted);margin:0}
+
+/* Ruta */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.panel h2{font-size:18px}
+.opts{display:flex;flex-direction:column;gap:8px;font-size:15px}
+.opts label{display:flex;gap:10px;align-items:center}
+.opts input{width:20px;height:20px;accent-color:var(--accent)}
+.sum{display:flex;gap:16px;flex-wrap:wrap}
+.sum div b{font-family:var(--f-display);font-size:24px;display:block;line-height:1.1}
+.sum div span{font-size:12px;color:var(--muted)}
+.schema{width:100%;height:auto;background:var(--sunk);border-radius:10px;display:block}
+.stops{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.stop{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding-block:10px;border-bottom:1px solid var(--line)}
+.stop:last-child{border-bottom:0}
+.stop .n{width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:700;font-size:14px}
+.stop .n.home{background:var(--ink);color:var(--bg)}
+.stop .n.aprox{background:var(--warn-soft);color:var(--warn);border:1.5px dashed var(--warn)}
+.stop .tag{display:inline-block;margin-bottom:2px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--accent);display:inline-block}
+.dot.aprox{background:var(--warn-soft);border:1.5px dashed var(--warn)}
+.fotos{display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x mandatory;margin:-4px -14px 0;padding:0 14px 2px;scrollbar-width:none}
+.fotos::-webkit-scrollbar{display:none}
+.fotos a{flex:none;scroll-snap-align:start;display:block}
+.fotos img{display:block;height:150px;width:auto;max-width:none;border-radius:10px;background:var(--sunk)}
+.fotos + .hint{margin-top:-4px}
+.stop .t{font-weight:700;font-size:15px}
+.stop .s{font-size:13px;color:var(--muted)}
+.legs{display:flex;flex-direction:column;gap:8px}
+.legs .btn{justify-content:space-between;text-align:left;width:100%}
+.todo{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.todo li{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.todo .t{font-weight:700}
+.todo .s{font-size:13px;color:var(--muted)}
+
+/* Datos */
+pre.json{background:var(--sunk);border-radius:10px;padding:10px;font-size:11px;max-height:50vh;overflow:auto;white-space:pre;margin:0}
+
+.empty{text-align:center;color:var(--muted);padding:40px 10px}
+
+/* Pestañas */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--surface);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center}
+.tabs-in{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%;max-width:540px}
+.tabs button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px;border-radius:10px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer}
+.tabs button svg{width:22px;height:22px}
+.tabs button[aria-selected="true"]{color:var(--accent);background:var(--accent-soft)}
+
+.toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;z-index:20;max-width:calc(100% - 32px);text-align:center}
+@media (prefers-reduced-motion: no-preference){.card{transition:border-color .2s,opacity .2s}}
+body{margin:0}[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <header class="top">
+    <div class="top-row">
+      <h1>Terrenos</h1>
+      <span class="sync" id="sync" data-s="conectando">Conectando…</span>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <section id="tab-lotes">
+    <div class="bar" id="filtros" role="group" aria-label="Filtrar lotes"></div>
+    <div class="sortrow">
+      <span id="cuenta"></span>
+      <label>Ordenar
+        <select id="orden">
+          <option value="recomendado">Recomendado</option>
+          <option value="precio">Precio</option>
+          <option value="puntos">Mi puntuación</option>
+          <option value="cerca">Cerca de Las Lajas</option>
+        </select>
+      </label>
+    </div>
+    <div class="list" id="list"><p class="empty">Cargando los lotes…</p></div>
+  </section>
+
+  <section id="tab-ruta" hidden></section>
+
+  <section id="tab-datos" hidden>
+    <div class="panel">
+      <h2>Tus datos</h2>
+      <p class="hint" id="datos-estado"></p>
+      <div class="btns">
+        <button class="btn primary" id="bajar-json" type="button">Descargar JSON</button>
+        <button class="btn" id="copiar-json" type="button">Copiar JSON</button>
+        <label class="btn" for="importar-json">Importar JSON</label>
+        <input type="file" id="importar-json" accept="application/json,.json" hidden>
+      </div>
+      <p class="hint">Importar sirve para pasar tus marcas a otro celular o recuperarlas si se borran los datos del navegador.</p>
+      <pre class="json" id="json"></pre>
+    </div>
+  </section>
+</div>
+
+<nav class="tabs" aria-label="Secciones">
+  <div class="tabs-in" role="tablist">
+    <button type="button" role="tab" data-tab="lotes" aria-selected="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Lotes</button>
+    <button type="button" role="tab" data-tab="ruta" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h7"/></svg>Ruta</button>
+    <button type="button" role="tab" data-tab="datos" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4H6a2 2 0 0 0-2 2v4l-2 2 2 2v4a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v4l2 2-2 2v4a2 2 0 0 1-2 2h-2"/></svg>Datos</button>
+  </div>
+</nav>
+<div class="toast" id="toast" hidden></div>
+
+<script type="application/json" id="lotes-data">
+[
+ {
+  "id": "jj-puquios-525",
+  "orden": 1,
+  "titulo": "2 lotes en Los Puquios",
+  "zona": "Los Puquios, Juana Koslay",
+  "precioUsd": 13000,
+  "precioTexto": "USD 11.000–13.000 c/u",
+  "m2": 525,
+  "m2Texto": "525 m² c/u (35 m de largo)",
+  "contacto": {
+   "nombre": "J&J Negocios Inmobiliarios (Juan Pablo Torres, mat. 831)",
+   "telefonos": [
+    "2664654711",
+    "2664574578"
+   ],
+   "canal": "WhatsApp / llamada"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "anuncia",
+   "saneamiento": "?"
+  },
+  "descripcion": "Dos lotes vecinos en barrio abierto. Papeles en regla, listo para escriturar. Escuchan ofertas.",
+  "alertas": [
+   "En Bullano figura a USD 11.000; en el aviso del 25/09 ya pide 13.000",
+   "Pedir ubicación exacta: el aviso solo dice 'Los Puquios'"
+  ],
+  "links": [
+   {
+    "label": "Bullano",
+    "url": "https://www.bullano.com.ar/terrenos/ficha/los-puquios-6175.html"
+   },
+   {
+    "label": "Clasificados SL",
+    "url": "https://www.clasificadossanluis.com/ads/vendo-2-terrenos-en-los-puquios-zona-muy-tranquila/"
+   }
+  ],
+  "lat": -33.2779,
+  "lng": -66.2226,
+  "precision": "zona",
+  "mapsQuery": "Los Puquios, Juana Koslay, San Luis",
+  "fuente": "portal",
+  "fotos": [
+   "https://www.clasificadossanluis.com/wp-content/uploads/2022/03/159967-725x490.jpg",
+   "https://www.clasificadossanluis.com/wp-content/uploads/2022/03/865987-725x490.jpg",
+   "https://www.clasificadossanluis.com/wp-content/uploads/2022/03/177157-725x490.jpg",
+   "https://www.clasificadossanluis.com/wp-content/uploads/2022/03/436618-725x490.jpg",
+   "https://www.bullano.com.ar/files/03-2022/ad6175/listing-465886833_large.jpg",
+   "https://www.bullano.com.ar/files/03-2022/ad6175/listing-1576442588_large.jpg"
+  ]
+ },
+ {
+  "id": "jj-puquios-650",
+  "orden": 2,
+  "titulo": "Lote 650 m² en Los Puquios",
+  "zona": "Los Puquios, Juana Koslay",
+  "precioUsd": 10000,
+  "precioTexto": "USD 10.000",
+  "m2": 650,
+  "m2Texto": "650 m²",
+  "contacto": {
+   "nombre": "J&J Negocios Inmobiliarios (Juan Pablo Torres, mat. 831)",
+   "telefonos": [
+    "2664654711",
+    "2664574578"
+   ],
+   "canal": "WhatsApp / llamada"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "anuncia",
+   "saneamiento": "?"
+  },
+  "descripcion": "Luz y agua. Papeles en regla, escritura inmediata. Escuchan ofertas de contado.",
+  "alertas": [
+   "El aviso también dice 'ARS 1.800.000', que no cierra con USD 10.000: confirmar precio",
+   "Pedir ubicación exacta"
+  ],
+  "links": [
+   {
+    "label": "Clasificados SL",
+    "url": "https://www.clasificadossanluis.com/ads/vendo-terreno-en-los-puquios/"
+   }
+  ],
+  "lat": -33.2779,
+  "lng": -66.2226,
+  "precision": "zona",
+  "mapsQuery": "Los Puquios, Juana Koslay, San Luis",
+  "fuente": "portal",
+  "fotos": [
+   "https://www.clasificadossanluis.com/wp-content/uploads/2021/05/784790-725x490.jpg",
+   "https://www.clasificadossanluis.com/wp-content/uploads/2021/05/199106-725x490.jpg",
+   "https://www.clasificadossanluis.com/wp-content/uploads/2021/05/995607-725x490.jpg",
+   "https://www.clasificadossanluis.com/wp-content/uploads/2021/05/316556-725x490.jpg"
+  ]
+ },
+ {
+  "id": "terralta-8-10k",
+  "orden": 3,
+  "titulo": "Lotes en Terralta desde USD 8.000",
+  "zona": "Terralta, El Volcán (Autopista Los Puquios y Ruta 20)",
+  "precioUsd": 10000,
+  "precioTexto": "USD 8.000–10.000",
+  "m2": 856,
+  "m2Texto": "550 a 864 m² según lote",
+  "contacto": {
+   "nombre": "Varias inmobiliarias (Organización Global, otros)",
+   "telefonos": [],
+   "canal": "Ver avisos"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "anuncia",
+   "saneamiento": "?"
+  },
+  "descripcion": "Barrio privado con seguridad, agua potable, luz y recolección. Lotes desde 500 m². Planean spa, caballerizas y senderos.",
+  "alertas": [
+   "Un aviso muestra expensas de ARS 55.000/mes",
+   "Precios vistos solo en resultados de búsqueda: confirmar cuál sigue disponible",
+   "Preguntar si el reglamento permite fosa séptica"
+  ],
+  "links": [
+   {
+    "label": "Organización Global",
+    "url": "https://organizacionglobal.com/property/venta-lote-de-856-terralta/"
+   },
+   {
+    "label": "Mercado Libre",
+    "url": "https://inmuebles.mercadolibre.com.ar/terrenos-lotes/venta/san-luis/terreno-terralta"
+   }
+  ],
+  "lat": -33.2649,
+  "lng": -66.1779,
+  "precision": "barrio",
+  "mapsQuery": "Terralta, El Volcán, San Luis",
+  "fuente": "portal",
+  "fotos": []
+ },
+ {
+  "id": "ramone-terralta-1200",
+  "orden": 4,
+  "titulo": "Terralta 1.200 m² (Ramoné)",
+  "zona": "Terralta, Los Puquios / El Volcán",
+  "precioUsd": null,
+  "precioTexto": "\"25.000.000\" (moneda a confirmar)",
+  "m2": 1200,
+  "m2Texto": "1.200 m²",
+  "contacto": {
+   "nombre": "Ramoné (Facebook Marketplace)",
+   "telefonos": [],
+   "canal": "Messenger"
+  },
+  "servicios": {
+   "luz": "?",
+   "agua": "?",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Le preguntaste ubicación, escritura, vehículos, expensas y servicios. Sin respuesta todavía.",
+  "alertas": [
+   "Si son USD 25.000 está muy por encima de lo que se pide en Terralta (USD 8–10k)",
+   "Preguntar monto de expensas"
+  ],
+  "links": [],
+  "lat": -33.2649,
+  "lng": -66.1779,
+  "precision": "barrio",
+  "mapsQuery": "Terralta, El Volcán, San Luis",
+  "fuente": "marketplace",
+  "fotos": []
+ },
+ {
+  "id": "jj-terralta-500-820",
+  "orden": 5,
+  "titulo": "Terralta 500 y 820 m² (J&J)",
+  "zona": "Loteo Terralta, El Volcán",
+  "precioUsd": 17500,
+  "precioTexto": "USD 17.500 (500 m²) / 24.600 (820 m²)",
+  "m2": 500,
+  "m2Texto": "500 m² u 820 m²",
+  "contacto": {
+   "nombre": "J&J Negocios Inmobiliarios (Juan Pablo Torres, mat. 831)",
+   "telefonos": [
+    "2664654711",
+    "2664574578"
+   ],
+   "canal": "WhatsApp / llamada"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "anuncia",
+   "saneamiento": "?"
+  },
+  "descripcion": "Luz, agua y seguridad en el ingreso. Papeles en regla, listo para escriturar. Escuchan ofertas o propuestas.",
+  "alertas": [
+   "Caros comparados con otros lotes de Terralta a USD 8–10k"
+  ],
+  "links": [
+   {
+    "label": "Clasificados SL",
+    "url": "https://www.clasificadossanluis.com/ads/vendo-2-terrenos-en-el-volcan-loteo-terralta/"
+   },
+   {
+    "label": "Bullano",
+    "url": "https://www.bullano.com.ar/terrenos/ficha/el-volcan-6180.html"
+   }
+  ],
+  "lat": -33.2649,
+  "lng": -66.1779,
+  "precision": "barrio",
+  "mapsQuery": "Terralta, El Volcán, San Luis",
+  "fuente": "portal",
+  "fotos": [
+   "https://www.clasificadossanluis.com/wp-content/uploads/2022/03/882724-725x490.jpg",
+   "https://www.clasificadossanluis.com/wp-content/uploads/2022/03/997948-725x490.jpg",
+   "https://www.clasificadossanluis.com/wp-content/uploads/2022/03/175439-725x490.jpg",
+   "https://www.clasificadossanluis.com/wp-content/uploads/2022/03/357276-725x490.jpg",
+   "https://www.bullano.com.ar/files/03-2022/ad6180/listing-1440405525_large.jpg",
+   "https://www.bullano.com.ar/files/03-2022/ad6180/listing-269455184_large.jpg"
+  ]
+ },
+ {
+  "id": "boris-rosas2",
+  "orden": 6,
+  "titulo": "Las Rosas II (Boris)",
+  "zona": "Barrio Privado Las Rosas II, Las Chacras",
+  "precioUsd": 18000,
+  "precioTexto": "USD 18.000",
+  "m2": null,
+  "m2Texto": "No informado",
+  "contacto": {
+   "nombre": "Boris (Facebook Marketplace)",
+   "telefonos": [],
+   "canal": "Messenger"
+  },
+  "servicios": {
+   "luz": "?",
+   "agua": "?",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Le preguntaste ubicación, escritura, servicios, vehículos y expensas. Sin respuesta todavía.",
+  "alertas": [
+   "En el mismo barrio JDA pide USD 25.000 por 600 m² con todo: averiguar por qué es más barato (¿más chico? ¿solo boleto?)"
+  ],
+  "links": [],
+  "lat": -33.2638,
+  "lng": -66.2302,
+  "precision": "barrio",
+  "mapsQuery": "Barrio Privado Las Rosas II, Av. del Portezuelo, Juana Koslay",
+  "fuente": "marketplace",
+  "fotos": []
+ },
+ {
+  "id": "jda-rosas2",
+  "orden": 7,
+  "titulo": "Las Rosas II 600 m² (JDA)",
+  "zona": "Barrio Privado Las Rosas II, Av. del Portezuelo",
+  "precioUsd": 25000,
+  "precioTexto": "USD 25.000 contado",
+  "m2": 600,
+  "m2Texto": "600 m²",
+  "contacto": {
+   "nombre": "JDA Bienes Raíces",
+   "telefonos": [],
+   "canal": "Ver aviso en Bullano"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "anuncia",
+   "saneamiento": "cloaca"
+  },
+  "descripcion": "Agua corriente, luz trifásica subterránea, cloaca, internet y seguridad 24 h. Título perfecto.",
+  "alertas": [
+   "Expensas no informadas",
+   "Sirve de referencia para el precio de Boris"
+  ],
+  "links": [
+   {
+    "label": "Bullano",
+    "url": "https://www.bullano.com.ar/terrenos/ficha/avenida-del-portezuelo-11423.html"
+   }
+  ],
+  "lat": -33.2638,
+  "lng": -66.2302,
+  "precision": "barrio",
+  "mapsQuery": "Barrio Privado Las Rosas II, Av. del Portezuelo, Juana Koslay",
+  "fuente": "portal",
+  "fotos": [
+   "https://www.bullano.com.ar/files/01-2024/ad11423/1705498486031.jpg",
+   "https://www.bullano.com.ar/files/01-2024/ad11423/1705498494767.jpeg",
+   "https://www.bullano.com.ar/files/01-2024/ad11423/1705498494768.jpeg"
+  ]
+ },
+ {
+  "id": "donovan-903",
+  "orden": 8,
+  "titulo": "Lote 903 m² en Donovan",
+  "zona": "Donovan, Juana Koslay",
+  "precioUsd": 15000,
+  "precioTexto": "USD 15.000",
+  "m2": 903,
+  "m2Texto": "903 m² (frente 28,6 m)",
+  "contacto": {
+   "nombre": "Grupo Alvant",
+   "telefonos": [],
+   "canal": "Ver aviso en Argenprop"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Cerca de Av. Serranías Puntanas. Agua y electricidad trifásica.",
+  "alertas": [
+   "Confirmar escritura individual y si los servicios están conectados o solo en la calle"
+  ],
+  "links": [
+   {
+    "label": "Argenprop",
+    "url": "https://www.argenprop.com/terreno-en-venta-en-juana-koslay--18734111"
+   }
+  ],
+  "lat": -33.3057,
+  "lng": -66.2643,
+  "precision": "barrio",
+  "mapsQuery": "Acceso Daniel Donovan, Juana Koslay",
+  "fuente": "portal",
+  "fotos": []
+ },
+ {
+  "id": "corral-piedra",
+  "orden": 9,
+  "titulo": "Corral de Piedra (Cuchi Corral)",
+  "zona": "Barrio cerrado, camino a Los Puquios",
+  "precioUsd": 19000,
+  "precioTexto": "USD 19.000–21.500",
+  "m2": 855,
+  "m2Texto": "855 o 1.504 m² (el aviso se contradice)",
+  "contacto": {
+   "nombre": "Inmobiliaria (ver Zonaprop)",
+   "telefonos": [],
+   "canal": "Ver aviso"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Vista al dique, portón eléctrico, luz y agua. Sin expensas.",
+  "alertas": [
+   "Precio y superficie contradictorios entre versiones del aviso",
+   "Confirmar si el reglamento permite fosa"
+  ],
+  "links": [
+   {
+    "label": "Zonaprop",
+    "url": "https://www.zonaprop.com.ar/propiedades/clasificado/vecltrin-terreno-en-venta-60086798.html"
+   }
+  ],
+  "lat": -33.2717,
+  "lng": -66.2199,
+  "precision": "barrio",
+  "mapsQuery": "Cuchi Corral, Juana Koslay, San Luis",
+  "fuente": "portal",
+  "fotos": [
+   "https://imgar.zonapropcdn.com/avisos/1/00/60/08/67/98/720x532/2076842870.jpg"
+  ]
+ },
+ {
+  "id": "cruz-piedra-652",
+  "orden": 10,
+  "titulo": "La Carolina 516, Cruz de Piedra",
+  "zona": "Cruz de Piedra (zona golf), Juana Koslay",
+  "precioUsd": 21000,
+  "precioTexto": "USD 21.000",
+  "m2": 652,
+  "m2Texto": "652 m²",
+  "contacto": {
+   "nombre": "Dueño directo (Mercado Libre)",
+   "telefonos": [],
+   "canal": "Mercado Libre"
+  },
+  "servicios": {
+   "luz": "?",
+   "agua": "?",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Tamaño cómodo para casa y patio. Tiene dirección exacta.",
+  "alertas": [
+   "Falta la ficha completa: servicios y escritura sin confirmar"
+  ],
+  "links": [
+   {
+    "label": "Mercado Libre (dueño directo)",
+    "url": "https://inmuebles.mercadolibre.com.ar/terrenos-lotes/venta/san-luis/san-luis/dueno-directo/"
+   }
+  ],
+  "lat": -33.2654,
+  "lng": -66.2163,
+  "precision": "barrio",
+  "mapsQuery": "La Carolina 516, Cruz de Piedra, Juana Koslay",
+  "fuente": "portal",
+  "fotos": []
+ },
+ {
+  "id": "higueras-340",
+  "orden": 11,
+  "titulo": "Esquina Las Higueras y El Caldén",
+  "zona": "San Roque, Juana Koslay",
+  "precioUsd": 20000,
+  "precioTexto": "USD 20.000",
+  "m2": 340,
+  "m2Texto": "340 m²",
+  "contacto": {
+   "nombre": "Grupo Alvant",
+   "telefonos": [],
+   "canal": "Ver aviso en Mercado Libre"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Terreno en esquina, 'todos los servicios'.",
+  "alertas": [
+   "Lote chico para el precio (USD 59/m²)",
+   "Precisar qué incluye 'todos los servicios'"
+  ],
+  "links": [
+   {
+    "label": "Mercado Libre",
+    "url": "https://terreno.mercadolibre.com.ar/MLA-2653395168-venta-terreno-34070-san-luis-juana-koslay-calle-las-higueras-_JM"
+   }
+  ],
+  "lat": -33.2838494,
+  "lng": -66.2444758,
+  "precision": "barrio",
+  "mapsQuery": "Las Higueras y El Caldén, Juana Koslay",
+  "fuente": "portal",
+  "fotos": [
+   "https://http2.mlstatic.com/D_NQ_NP_663255-MLA112546751578_062026-O.webp"
+  ]
+ },
+ {
+  "id": "magnolias-226",
+  "orden": 12,
+  "titulo": "Las Magnolias 226, Potrero",
+  "zona": "Potrero de los Funes",
+  "precioUsd": 20000,
+  "precioTexto": "USD 20.000",
+  "m2": 455,
+  "m2Texto": "455 o 500 m² (se contradice)",
+  "contacto": {
+   "nombre": "Inmobiliaria (ver Argenprop)",
+   "telefonos": [],
+   "canal": "Ver aviso"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "?",
+   "saneamiento": "cloaca"
+  },
+  "descripcion": "Cerca de la Municipalidad y la comisaría. Pavimento, agua, luz, gas y cloaca anunciados.",
+  "alertas": [
+   "El aviso de Argenprop ya no está publicado: puede estar vendido",
+   "Superficie contradictoria",
+   "Escritura sin confirmar"
+  ],
+  "links": [
+   {
+    "label": "Argenprop",
+    "url": "https://www.argenprop.com/22814691--terreno-en-venta-en-potrero-de-los-funes--19631473"
+   }
+  ],
+  "lat": -33.215,
+  "lng": -66.2238,
+  "precision": "exacta",
+  "mapsQuery": "Las Magnolias 226, Potrero de los Funes, San Luis",
+  "fuente": "portal",
+  "fotos": []
+ },
+ {
+  "id": "villa-aguadita-700",
+  "orden": 13,
+  "titulo": "Villa Aguadita del Portezuelo",
+  "zona": "Barrio privado, La Punta",
+  "precioUsd": 10500,
+  "precioTexto": "USD 10.500",
+  "m2": 700,
+  "m2Texto": "700 m²",
+  "contacto": {
+   "nombre": "Dueño directo (Mercado Libre)",
+   "telefonos": [],
+   "canal": "Mercado Libre"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "anuncia",
+   "saneamiento": "?"
+  },
+  "descripcion": "Plano. Agua y electricidad disponibles. Listo para escriturar.",
+  "alertas": [
+   "Expensas publicadas: ARS 90.000/mes",
+   "'Disponible' puede ser solo en la calle: preguntar si está conectado"
+  ],
+  "links": [
+   {
+    "label": "Mercado Libre",
+    "url": "https://terreno.mercadolibre.com.ar/MLA-3830960020-lote-terreno-700m2-barrio-privado-villa-aguadita-del-portezuelo-san-luis-la-punta-_JM"
+   }
+  ],
+  "lat": -33.2086319,
+  "lng": -66.2977312,
+  "precision": "barrio",
+  "mapsQuery": "Villa Aguadita del Portezuelo, La Punta, San Luis",
+  "fuente": "portal",
+  "fotos": [
+   "https://http2.mlstatic.com/D_NQ_NP_640230-MLA114206916829_072026-O.webp"
+  ]
+ },
+ {
+  "id": "joaquin-casa-chacras",
+  "orden": 14,
+  "titulo": "Casa a terminar en Las Chacras (Joaquín)",
+  "zona": "Barrio Las Chacras, Juana Koslay",
+  "precioUsd": 45000,
+  "precioTexto": "USD 45.000",
+  "m2": null,
+  "m2Texto": "No informado",
+  "contacto": {
+   "nombre": "Joaquín (Facebook Marketplace)",
+   "telefonos": [
+    "2664659410"
+   ],
+   "canal": "WhatsApp"
+  },
+  "servicios": {
+   "luz": "si",
+   "agua": "si",
+   "escritura": "si",
+   "saneamiento": "?"
+  },
+  "descripcion": "Casa a terminar con terreno. Mandó la ubicación exacta y respondió 'Todo sí' a tus preguntas.",
+  "alertas": [
+   "Pasa el presupuesto",
+   "'Todo sí' es muy general: pedir escritura y estado de la obra por escrito"
+  ],
+  "links": [
+   {
+    "label": "Ubicación que mandó",
+    "url": "https://maps.app.goo.gl/e93wwrVKHvLm5NVS7"
+   }
+  ],
+  "lat": -33.264694,
+  "lng": -66.235361,
+  "precision": "exacta",
+  "mapsQuery": "-33.264694,-66.235361",
+  "fuente": "marketplace",
+  "fotos": []
+ },
+ {
+  "id": "pancha3-872",
+  "orden": 15,
+  "titulo": "La Pancha III 872 m²",
+  "zona": "Barrio privado La Pancha III, Las Chacras",
+  "precioUsd": 45000,
+  "precioTexto": "USD 45.000–49.000",
+  "m2": 872,
+  "m2Texto": "872 m²",
+  "contacto": {
+   "nombre": "J&J Negocios Inmobiliarios / dueño directo",
+   "telefonos": [
+    "2664654711",
+    "2664574578"
+   ],
+   "canal": "WhatsApp / llamada"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "anuncia",
+   "saneamiento": "cloaca"
+  },
+  "descripcion": "Todos los servicios con cloaca y gas. Lote cancelado, escritura inmediata. Aceptan permuta y algo de financiación.",
+  "alertas": [
+   "En Bullano figura a USD 20.000 pero es un error de carga: el mismo lote está a 45–49k",
+   "Pasa el presupuesto"
+  ],
+  "links": [
+   {
+    "label": "Clasificados SL",
+    "url": "https://www.clasificadossanluis.com/ads/vendo-terreno-en-la-pancha-iii-juana-koslay/"
+   },
+   {
+    "label": "Bullano",
+    "url": "https://www.bullano.com.ar/terrenos/ficha/la-pancha-3-15084.html"
+   }
+  ],
+  "lat": -33.2647,
+  "lng": -66.2403,
+  "precision": "barrio",
+  "mapsQuery": "La Pancha, Las Chacras, Juana Koslay",
+  "fuente": "portal",
+  "fotos": [
+   "https://www.bullano.com.ar/files/07-2025/ad15084/1752536608179.jpg",
+   "https://www.bullano.com.ar/files/07-2025/ad15084/1752537036552.jpg",
+   "https://www.bullano.com.ar/files/07-2025/ad15084/1752537036549.jpg",
+   "https://www.clasificadossanluis.com/wp-content/uploads/2025/04/66197-500x281.jpg"
+  ]
+ },
+ {
+  "id": "terracity-670",
+  "orden": 16,
+  "titulo": "Lote 670 m² (Terracity)",
+  "zona": "Juana Koslay, a 300 m de Av. del Viento Chorrillero",
+  "precioUsd": 28000,
+  "precioTexto": "USD 28.000 (20.000 + 4 cuotas de 2.000)",
+  "m2": 670,
+  "m2Texto": "670 m²",
+  "contacto": {
+   "nombre": "Terracity",
+   "telefonos": [
+    "2664262670",
+    "2664920320"
+   ],
+   "canal": "WhatsApp / llamada"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "?",
+   "saneamiento": "cloaca"
+  },
+  "descripcion": "Entorno natural. Agua, luz, gas y cloaca. La oficina está en Av. del Viento Chorrillero 591.",
+  "alertas": [
+   "Escritura y expensas no informadas",
+   "Pasa el tope, pero con cuotas el primer pago es de 20k"
+  ],
+  "links": [
+   {
+    "label": "Terracity",
+    "url": "https://terracity.com.ar/propiedad/terreno-en-juana-koslay-670m2/"
+   },
+   {
+    "label": "Ubicación del aviso",
+    "url": "https://maps.app.goo.gl/RWQTGoTsvbV4ot1C9"
+   }
+  ],
+  "lat": -33.283657,
+  "lng": -66.238879,
+  "precision": "exacta",
+  "mapsQuery": "-33.283657,-66.238879",
+  "fuente": "portal",
+  "fotos": [
+   "https://terracity.com.ar/wp-content/uploads/2026/07/IMG-20260409-WA0012.jpg",
+   "https://terracity.com.ar/wp-content/uploads/2026/07/IMG-20260409-WA0017.jpg",
+   "https://terracity.com.ar/wp-content/uploads/2026/07/IMG-20260409-WA0013.jpg",
+   "https://terracity.com.ar/wp-content/uploads/2026/07/IMG-20260409-WA0014.jpg"
+  ]
+ },
+ {
+  "id": "villa-regina-800",
+  "orden": 17,
+  "titulo": "Villa Regina 800 m²",
+  "zona": "Loteo Villa Regina, Las Chacras",
+  "precioUsd": 30000,
+  "precioTexto": "USD 30.000",
+  "m2": 800,
+  "m2Texto": "800 m²",
+  "contacto": {
+   "nombre": "J&J Negocios Inmobiliarios (Juan Pablo Torres, mat. 831)",
+   "telefonos": [
+    "2664654711",
+    "2664574578"
+   ],
+   "canal": "WhatsApp / llamada"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "anuncia",
+   "saneamiento": "cloaca"
+  },
+  "descripcion": "Luz, agua y cloaca, con factibilidad de gas. Papeles en regla, escritura inmediata.",
+  "alertas": [
+   "Pasa el presupuesto",
+   "No pude ubicar el loteo en el mapa"
+  ],
+  "links": [
+   {
+    "label": "Clasificados SL",
+    "url": "https://www.clasificadossanluis.com/ads/vendo-terreno-en-loteo-villa-regina-juana-koslay/"
+   }
+  ],
+  "lat": -33.256,
+  "lng": -66.2378,
+  "precision": "zona",
+  "mapsQuery": "Loteo Villa Regina, Las Chacras, Juana Koslay",
+  "fuente": "portal",
+  "fotos": [
+   "https://www.clasificadossanluis.com/wp-content/uploads/2022/10/294291-500x281.jpg"
+  ]
+ },
+ {
+  "id": "chacras-2500",
+  "orden": 18,
+  "titulo": "2.500 m² camino a Las Chacras",
+  "zona": "Camino Portezuelo, Las Chacras",
+  "precioUsd": 35000,
+  "precioTexto": "USD 35.000 (negociable)",
+  "m2": 2500,
+  "m2Texto": "2.500 m² (100 × 25 m)",
+  "contacto": {
+   "nombre": "Javier Becerra (J&J Negocios Inmobiliarios)",
+   "telefonos": [
+    "2664654711"
+   ],
+   "canal": "WhatsApp / llamada"
+  },
+  "servicios": {
+   "luz": "conectar",
+   "agua": "anuncia",
+   "escritura": "anuncia",
+   "saneamiento": "?"
+  },
+  "descripcion": "Tiene agua; la luz está a conectar. Papeles en regla, escritura inmediata. Aceptan un vehículo como parte de pago.",
+  "alertas": [
+   "Pasa el presupuesto",
+   "Calcular costo de traer la luz"
+  ],
+  "links": [
+   {
+    "label": "Clasificados SL",
+    "url": "https://www.clasificadossanluis.com/ads/vendo-terreno-camino-a-las-chacras/"
+   }
+  ],
+  "lat": -33.252,
+  "lng": -66.26,
+  "precision": "zona",
+  "mapsQuery": "Camino del Portezuelo, Las Chacras, Juana Koslay",
+  "fuente": "portal",
+  "fotos": [
+   "https://www.clasificadossanluis.com/wp-content/uploads/2024/01/360684-725x490.jpg",
+   "https://www.clasificadossanluis.com/wp-content/uploads/2024/01/633064-725x490.jpg",
+   "https://www.clasificadossanluis.com/wp-content/uploads/2024/01/280906-725x490.jpg"
+  ]
+ },
+ {
+  "id": "la-delfina-525",
+  "orden": 19,
+  "titulo": "La Delfina, El Volcán",
+  "zona": "Barrio La Delfina, El Volcán (Ruta 20)",
+  "precioUsd": 10000,
+  "precioTexto": "USD 10.000–12.700",
+  "m2": 525,
+  "m2Texto": "525 m²",
+  "contacto": {
+   "nombre": "RE/MAX Comienzos / otros",
+   "telefonos": [],
+   "canal": "Ver avisos"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "anuncia",
+   "saneamiento": "?"
+  },
+  "descripcion": "Agua potable, electricidad, alumbrado, recolección, mensura y escritura al día (según una versión).",
+  "alertas": [
+   "La versión de Argenprop ya no está publicada; la de Zonaprop sigue",
+   "Tres precios distintos: puede que sean lotes diferentes",
+   "No pude ubicar el barrio en el mapa"
+  ],
+  "links": [
+   {
+    "label": "Argenprop",
+    "url": "https://www.argenprop.com/terreno-en-venta-en-el-volcan--20453110"
+   },
+   {
+    "label": "Zonaprop",
+    "url": "https://www.zonaprop.com.ar/propiedades/clasificado/vecltrin-terreno-en-venta-en-barrio-la-delfina-el-volcan-60289838.html"
+   }
+  ],
+  "lat": -33.253,
+  "lng": -66.1751,
+  "precision": "zona",
+  "mapsQuery": "Barrio La Delfina, El Volcán, San Luis",
+  "fuente": "portal",
+  "fotos": [
+   "https://imgar.zonapropcdn.com/avisos/1/00/60/28/98/38/720x532/2081927467.jpg"
+  ]
+ },
+ {
+  "id": "volcan-1975",
+  "orden": 20,
+  "titulo": "1.975 m² en barrio cerrado, Ruta 20",
+  "zona": "El Volcán",
+  "precioUsd": 15000,
+  "precioTexto": "USD 15.000",
+  "m2": 1975,
+  "m2Texto": "1.975 m²",
+  "contacto": {
+   "nombre": "Inmobiliaria (ver Zonaprop)",
+   "telefonos": [],
+   "canal": "Ver aviso"
+  },
+  "servicios": {
+   "luz": "?",
+   "agua": "?",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Terreno grande en barrio cerrado. Otro aviso parecido menciona escritura y 5% de honorarios.",
+  "alertas": [
+   "Servicios y escritura sin confirmar",
+   "Preguntar expensas"
+  ],
+  "links": [
+   {
+    "label": "Zonaprop",
+    "url": "https://www.zonaprop.com.ar/propiedades/clasificado/vecltrin-terreno-en-barrio-cerrado-el-volcan-san-luis-52539242.html"
+   }
+  ],
+  "lat": -33.253,
+  "lng": -66.1751,
+  "precision": "zona",
+  "mapsQuery": "El Volcán, San Luis",
+  "fuente": "portal",
+  "fotos": [
+   "https://imgar.zonapropcdn.com/avisos/1/00/52/53/92/42/720x532/1885999005.jpg"
+  ]
+ },
+ {
+  "id": "el-talita-5000",
+  "orden": 21,
+  "titulo": "El Talita 5.000 m²",
+  "zona": "Ruta Provincial 20 km 22, El Volcán",
+  "precioUsd": 19000,
+  "precioTexto": "USD 19.000",
+  "m2": 5000,
+  "m2Texto": "5.000 m²",
+  "contacto": {
+   "nombre": "Inmobiliaria (ver Zonaprop)",
+   "telefonos": [],
+   "canal": "Ver aviso"
+  },
+  "servicios": {
+   "luz": "?",
+   "agua": "?",
+   "escritura": "anuncia",
+   "saneamiento": "?"
+  },
+  "descripcion": "Escritura, posesión inmediata y financiación. Aceptan vehículo como parte de pago.",
+  "alertas": [
+   "Luz y agua sin confirmar",
+   "Revisar relieve y acceso"
+  ],
+  "links": [
+   {
+    "label": "Zonaprop",
+    "url": "https://www.zonaprop.com.ar/propiedades/clasificado/vecltrin-vendo-terreno-5.000-m-sup2--sobre-ruta-el-volcan-55372894.html"
+   }
+  ],
+  "lat": -33.245,
+  "lng": -66.16,
+  "precision": "zona",
+  "mapsQuery": "El Talita, Ruta 20, El Volcán, San Luis",
+  "fuente": "portal",
+  "fotos": [
+   "https://imgar.zonapropcdn.com/avisos/1/00/55/37/28/94/720x532/1955134487.jpg"
+  ]
+ },
+ {
+  "id": "campo-la-sierra-1200",
+  "orden": 22,
+  "titulo": "Campo La Sierra 1.200 m²",
+  "zona": "El Volcán",
+  "precioUsd": 21000,
+  "precioTexto": "USD 21.000",
+  "m2": 1200,
+  "m2Texto": "1.200 m²",
+  "contacto": {
+   "nombre": "Inmobiliaria (ver Zonaprop)",
+   "telefonos": [],
+   "canal": "Ver aviso"
+  },
+  "servicios": {
+   "luz": "?",
+   "agua": "?",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "En altura, con vista a las sierras. Ya hicieron movimiento de suelo para la plataforma. Sin expensas.",
+  "alertas": [
+   "Luz, agua y escritura sin confirmar"
+  ],
+  "links": [
+   {
+    "label": "Zonaprop",
+    "url": "https://www.zonaprop.com.ar/propiedades/clasificado/vecltrin-venta-de-terreno-en-altura-campo-la-sierra-60200989.html"
+   }
+  ],
+  "lat": -33.253,
+  "lng": -66.1751,
+  "precision": "zona",
+  "mapsQuery": "Campo La Sierra, El Volcán, San Luis",
+  "fuente": "portal",
+  "fotos": [
+   "https://imgar.zonapropcdn.com/avisos/1/00/60/20/09/89/720x532/2079688133.jpg"
+  ]
+ },
+ {
+  "id": "cerro-victoria-820",
+  "orden": 23,
+  "titulo": "Cerro Victoria, Mza 14 Lote 22",
+  "zona": "Potrero de los Funes",
+  "precioUsd": 20000,
+  "precioTexto": "USD 20.000",
+  "m2": 820,
+  "m2Texto": "820 m²",
+  "contacto": {
+   "nombre": "Inmobiliaria Muñoz",
+   "telefonos": [],
+   "canal": "Ver aviso en Mercado Libre"
+  },
+  "servicios": {
+   "luz": "?",
+   "agua": "?",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Lote identificado por manzana y número.",
+  "alertas": [
+   "Ubicación según el mapa del aviso",
+   "Servicios y escritura sin confirmar"
+  ],
+  "links": [
+   {
+    "label": "Mercado Libre",
+    "url": "https://terreno.mercadolibre.com.ar/MLA-2864116236-terreno-venta-barrio-cerro-victoria-mza14-lote-22-potrero-de-los-funes-_JM"
+   }
+  ],
+  "lat": -33.2197154,
+  "lng": -66.2308601,
+  "precision": "barrio",
+  "mapsQuery": "Barrio Cerro Victoria, Potrero de los Funes",
+  "fuente": "portal",
+  "fotos": [
+   "https://http2.mlstatic.com/D_NQ_NP_682080-MLA112713059049_062026-O.webp"
+  ]
+ },
+ {
+  "id": "la-florentina-obra",
+  "orden": 24,
+  "titulo": "Casa en obra, La Florentina",
+  "zona": "Club de Campo La Florentina, La Punta",
+  "precioUsd": 25000,
+  "precioTexto": "USD 25.000",
+  "m2": null,
+  "m2Texto": "76 m² cubiertos, 4 ambientes, 2 baños",
+  "contacto": {
+   "nombre": "Ver aviso en Mercado Libre",
+   "telefonos": [],
+   "canal": "Mercado Libre"
+  },
+  "servicios": {
+   "luz": "?",
+   "agua": "?",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Obra avanzada. No se sabe cuánto falta para terminarla.",
+  "alertas": [
+   "No es casa habitable hasta verla",
+   "No pude ubicar el barrio en el mapa"
+  ],
+  "links": [
+   {
+    "label": "Mercado Libre",
+    "url": "https://inmuebles.mercadolibre.com.ar/casas/venta/san-luis/san-luis/la-punta/"
+   }
+  ],
+  "lat": -33.1836,
+  "lng": -66.3127,
+  "precision": "zona",
+  "mapsQuery": "Club de Campo La Florentina, La Punta, San Luis",
+  "fuente": "portal",
+  "fotos": []
+ },
+ {
+  "id": "campo-ruta7-1ha",
+  "orden": 25,
+  "titulo": "1 hectárea, Ruta 7 km 778",
+  "zona": "Juana Koslay",
+  "precioUsd": 14000,
+  "precioTexto": "USD 14.000",
+  "m2": 10000,
+  "m2Texto": "10.000 m²",
+  "contacto": {
+   "nombre": "Inmobiliaria (ver Zonaprop)",
+   "telefonos": [],
+   "canal": "Ver aviso"
+  },
+  "servicios": {
+   "luz": "conectar",
+   "agua": "anuncia",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Campo con agua en el ingreso y tendido eléctrico por la calle de acceso.",
+  "alertas": [
+   "El aviso de Zonaprop ya no está publicado: puede estar vendido",
+   "Es campo: confirmar si se puede hacer vivienda",
+   "Sin ubicación precisa"
+  ],
+  "links": [
+   {
+    "label": "Zonaprop",
+    "url": "https://www.zonaprop.com.ar/propiedades/clasificado/veclrain-se-vende-1-hectarea-de-campo-59978695.html"
+   }
+  ],
+  "lat": null,
+  "lng": null,
+  "precision": "sin",
+  "mapsQuery": "Ruta Nacional 7 km 778, Juana Koslay",
+  "fuente": "portal",
+  "fotos": [
+   "https://imgar.zonapropcdn.com/avisos/1/00/59/97/86/95/720x532/2074227626.jpg"
+  ]
+ },
+ {
+  "id": "matias-jk-23k",
+  "orden": 26,
+  "titulo": "Terreno en Juana Koslay (Matías)",
+  "zona": "Juana Koslay",
+  "precioUsd": 23000,
+  "precioTexto": "USD 23.000",
+  "m2": null,
+  "m2Texto": "No informado",
+  "contacto": {
+   "nombre": "Matías (Facebook Marketplace)",
+   "telefonos": [],
+   "canal": "Messenger"
+  },
+  "servicios": {
+   "luz": "?",
+   "agua": "?",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Le ofreciste permuta: Dominar 250 2021 + Corolla 2016 + diferencia. Pediste expensas y ubicación.",
+  "alertas": [
+   "Sin respuesta todavía"
+  ],
+  "links": [],
+  "lat": null,
+  "lng": null,
+  "precision": "sin",
+  "mapsQuery": "Juana Koslay, San Luis",
+  "fuente": "marketplace",
+  "fotos": []
+ },
+ {
+  "id": "boris-jk-24k",
+  "orden": 27,
+  "titulo": "Lote en Juana Koslay (Boris)",
+  "zona": "Juana Koslay",
+  "precioUsd": 24000,
+  "precioTexto": "USD 24.000",
+  "m2": null,
+  "m2Texto": "No informado",
+  "contacto": {
+   "nombre": "Boris (Facebook Marketplace)",
+   "telefonos": [],
+   "canal": "Messenger / te va a escribir"
+  },
+  "servicios": {
+   "luz": "?",
+   "agua": "?",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Dijo que quizás reciba un vehículo como parte de pago. Le pasaste tu número y quedó en mandarte la info.",
+  "alertas": [
+   "Puede ser el mismo Boris de Las Rosas II"
+  ],
+  "links": [],
+  "lat": null,
+  "lng": null,
+  "precision": "sin",
+  "mapsQuery": "Juana Koslay, San Luis",
+  "fuente": "marketplace",
+  "fotos": []
+ },
+ {
+  "id": "gustavo-jk-28k",
+  "orden": 28,
+  "titulo": "Terrenos en Juana Koslay (Gustavo Fabián)",
+  "zona": "Juana Koslay",
+  "precioUsd": 28000,
+  "precioTexto": "USD 28.000",
+  "m2": null,
+  "m2Texto": "No informado",
+  "contacto": {
+   "nombre": "Gustavo Fabián (Facebook Marketplace)",
+   "telefonos": [],
+   "canal": "Messenger"
+  },
+  "servicios": {
+   "luz": "?",
+   "agua": "?",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Te mandó un audio de 1:18 con la info. Le dijiste que estás viendo opciones.",
+  "alertas": [
+   "Anotá acá lo que dijo en el audio"
+  ],
+  "links": [],
+  "lat": null,
+  "lng": null,
+  "precision": "sin",
+  "mapsQuery": "Juana Koslay, San Luis",
+  "fuente": "marketplace",
+  "fotos": []
+ },
+ {
+  "id": "jonatan-puquios",
+  "orden": 29,
+  "titulo": "Terreno en Los Puquios (Jonatan)",
+  "zona": "Los Puquios, Juana Koslay",
+  "precioUsd": null,
+  "precioTexto": "Sin precio real",
+  "m2": null,
+  "m2Texto": "No informado",
+  "contacto": {
+   "nombre": "Jonatan (Facebook Marketplace)",
+   "telefonos": [],
+   "canal": "Messenger / te va a escribir"
+  },
+  "servicios": {
+   "luz": "?",
+   "agua": "?",
+   "escritura": "?",
+   "saneamiento": "?"
+  },
+  "descripcion": "Publicado como 'Líquido excelente terreno'. Le dejaste tu WhatsApp.",
+  "alertas": [
+   "El precio publicado (18.000.000.000) es de relleno"
+  ],
+  "links": [],
+  "lat": -33.2779,
+  "lng": -66.2226,
+  "precision": "zona",
+  "mapsQuery": "Los Puquios, Juana Koslay, San Luis",
+  "fuente": "marketplace",
+  "fotos": []
+ },
+ {
+  "id": "miguel-el-bajo",
+  "orden": 30,
+  "titulo": "Terreno en construcción, El Bajo (Miguel)",
+  "zona": "Barrio El Bajo, Juana Koslay",
+  "precioUsd": null,
+  "precioTexto": "\"8 millones\" (moneda a confirmar)",
+  "m2": null,
+  "m2Texto": "No informado",
+  "contacto": {
+   "nombre": "Miguel (Facebook Marketplace)",
+   "telefonos": [],
+   "canal": "Messenger"
+  },
+  "servicios": {
+   "luz": "anuncia",
+   "agua": "anuncia",
+   "escritura": "no",
+   "saneamiento": "?"
+  },
+  "descripcion": "Todos los servicios. Recibe auto o moto. Tiene solo boleto de compraventa.",
+  "alertas": [
+   "Sin escritura: no cumple lo que buscás"
+  ],
+  "links": [],
+  "lat": null,
+  "lng": null,
+  "precision": "sin",
+  "mapsQuery": "Barrio El Bajo, Juana Koslay",
+  "fuente": "marketplace",
+  "fotos": []
+ }
+]
+</script>
+<script>
+(function(){
+const ORIGEN = {lat:-33.334, lng:-66.392, nombre:'Barrio Privado Las Lajas', query:'Urbanización Las Lajas, San Luis, Argentina'};
+const PRESUPUESTO = 22000;
+const KM_RUTA = 1.3;          // la ruta real es ~30% más larga que la línea recta
+const LS_KEY = 'terrenos-jk-v1', UI_KEY = 'terrenos-jk-ui';
+
+let lotes = {}, evals = {}, estado = 'local';
+try{
+  JSON.parse(document.getElementById('lotes-data').textContent).forEach(l => { lotes[l.id] = l; });
+}catch(e){}
+let ui = {tab:'lotes', filtro:'todos', orden:'recomendado', saltearVisitados:true, saltearNo:true, soloPresupuesto:false, incluirAprox:true};
+let renderPendiente = false;
+const escribiendo = {}, cadenas = {};
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const usd = n => 'USD ' + Math.round(n).toLocaleString('es-AR');
+
+function leerLocal(){
+  try{ const c = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); if(c){ evals = c.evals || {}; } }catch(e){ estado = 'error'; }
+  try{ Object.assign(ui, JSON.parse(localStorage.getItem(UI_KEY) || '{}')); }catch(e){}
+}
+function guardarLocal(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify({evals, guardado:new Date().toISOString()})); estado = 'local'; }
+  catch(e){ estado = 'error'; toast('Este navegador no deja guardar. Descargá el JSON para no perder tus marcas.'); }
+}
+function guardarUI(){ try{ localStorage.setItem(UI_KEY, JSON.stringify(ui)); }catch(e){} }
+
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2600); }
+
+function hav(a, b){
+  const R = 6371, r = x => x * Math.PI / 180;
+  const dLa = r(b.lat - a.lat), dLo = r(b.lng - a.lng);
+  const h = Math.sin(dLa/2)**2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLo/2)**2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+const ev = id => evals[id] || {};
+function ubic(l){
+  const e = ev(l.id);
+  if(e.ubicacion && typeof e.ubicacion.lat === 'number') return {lat:e.ubicacion.lat, lng:e.ubicacion.lng, precision:'tuya'};
+  if(l.lat != null && l.precision !== 'sin') return {lat:l.lat, lng:l.lng, precision:l.precision};
+  return null;
+}
+function urlVer(l){
+  const u = ubic(l);
+  const q = u && (u.precision === 'exacta' || u.precision === 'tuya') ? u.lat + ',' + u.lng : l.mapsQuery;
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+}
+function urlIr(l){
+  const u = ubic(l);
+  const d = u ? u.lat + ',' + u.lng : l.mapsQuery;
+  return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + encodeURIComponent(d);
+}
+
+/* ---------- Guardado ---------- */
+function guardarEval(id, cambios){
+  const nuevo = Object.assign({}, ev(id), cambios, {actualizado:new Date().toISOString()});
+  evals[id] = nuevo;
+  guardarLocal();
+  pintarEstado(); pintarStats();
+}
+
+/* ---------- Header ---------- */
+function pintarEstado(){
+  const s = $('#sync');
+  const txt = {local:'Guardado en este celular', error:'No se puede guardar'}[estado];
+  s.dataset.s = estado === 'local' ? 'nube' : 'error'; s.textContent = txt;
+  const d = $('#datos-estado');
+  if(d) d.textContent = estado === 'local'
+    ? 'Lo que marcás queda guardado en este navegador, aunque cierres la página. Descargá o copiá el JSON y pasáselo a Claude para que vea todo.'
+    : 'Este navegador no deja guardar (modo incógnito o datos bloqueados). Descargá el JSON antes de cerrar.';
+}
+function pintarStats(){
+  const ls = Object.values(lotes);
+  const vis = ls.filter(l => ev(l.id).visitado).length;
+  const si = ls.filter(l => ev(l.id).meGusta === 'si').length;
+  const pres = ls.filter(l => l.precioUsd != null && l.precioUsd <= PRESUPUESTO).length;
+  $('#stats').innerHTML =
+    `<div class="stat"><b class="num">${ls.length}</b><span>Lotes</span></div>` +
+    `<div class="stat"><b class="num">${pres}</b><span>≤ 22k</span></div>` +
+    `<div class="stat"><b class="num">${vis}</b><span>Visitados</span></div>` +
+    `<div class="stat"><b class="num">${si}</b><span>Me gustan</span></div>`;
+}
+
+/* ---------- Lista ---------- */
+const FILTROS = [['todos','Todos'],['presupuesto','Hasta USD 22k'],['pendientes','Sin visitar'],['visitados','Visitados'],['megusta','Me gustan'],['descartados','Descartados']];
+function pasa(l){
+  const e = ev(l.id);
+  switch(ui.filtro){
+    case 'presupuesto': return l.precioUsd != null && l.precioUsd <= PRESUPUESTO;
+    case 'pendientes': return !e.visitado;
+    case 'visitados': return !!e.visitado;
+    case 'megusta': return e.meGusta === 'si';
+    case 'descartados': return e.meGusta === 'no';
+    default: return true;
+  }
+}
+function ordenados(){
+  const ls = Object.values(lotes).filter(pasa);
+  const big = 1e12;
+  const k = {
+    recomendado: l => l.orden ?? 999,
+    precio: l => l.precioUsd ?? big,
+    puntos: l => -(ev(l.id).puntuacion || 0),
+    cerca: l => { const u = ubic(l); return u ? hav(ORIGEN, u) : big; }
+  }[ui.orden] || (l => l.orden ?? 999);
+  return ls.sort((a, b) => k(a) - k(b) || (a.orden ?? 999) - (b.orden ?? 999));
+}
+const SVC = [['luz','Luz'],['agua','Agua'],['escritura','Escritura'],['saneamiento','Cloaca / fosa']];
+const EST = {si:['ok','Confirmado'], anuncia:['info','Anunciado'], cloaca:['ok','Tiene cloaca'], conectar:['warn','A conectar'], no:['bad','No tiene'], '?':['muted','Preguntar']};
+const PREC = {exacta:['ok','Ubicación exacta'], tuya:['ok','Ubicación tuya'], barrio:['acc','Ubicación por barrio'], zona:['warn','Zona aproximada'], sin:['warn','Sin ubicación']};
+
+const ICO = {
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+  go:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8z"/></svg>',
+  link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>'
+};
+
+function card(l){
+  const e = ev(l.id), u = ubic(l);
+  const prec = PREC[u ? u.precision : l.precision] || PREC.sin;
+  const porM2 = l.precioUsd && l.m2 ? usd(l.precioUsd / l.m2) + '/m²' : '';
+  const tags = [`<span class="tag ${prec[0]}">${prec[1]}</span>`];
+  if(l.precioUsd != null && l.precioUsd > PRESUPUESTO) tags.push('<span class="tag warn">Pasa los 22k</span>');
+  if(l.fuente === 'marketplace') tags.push('<span class="tag">Marketplace</span>');
+  if(u) tags.push(`<span class="tag num">${u.precision === 'zona' ? '≈ ' : ''}${Math.round(hav(ORIGEN, u) * KM_RUTA)} km de Las Lajas</span>`);
+  const fotos = (l.fotos || []).length
+    ? `<div class="fotos">${l.fotos.map((f, i) => `<a href="${esc(f)}" target="_blank" rel="noopener"><img src="${esc(f)}" loading="lazy" referrerpolicy="no-referrer" alt="Foto ${i + 1} del aviso" onerror="this.parentNode.remove()"></a>`).join('')}</div><p class="hint">Fotos del aviso · tocá una para verla grande</p>`
+    : (l.fuente === 'marketplace' ? '<p class="hint">Las fotos están en el chat de Marketplace.</p>' : '');
+
+  const svc = SVC.map(([k, lab]) => {
+    const v = (l.servicios || {})[k] || '?';
+    const [cls, txt] = EST[v] || EST['?'];
+    return `<li class="${cls}">${lab}<em>${k === 'saneamiento' && v === '?' ? 'Preguntar fosa' : txt}</em></li>`;
+  }).join('');
+
+  const c = l.contacto || {};
+  const tels = (c.telefonos || []).map(t =>
+    `<div class="phone"><code class="num">${esc(t)}</code>
+      <a class="btn small" href="https://wa.me/549${esc(t)}" target="_blank" rel="noopener">WhatsApp</a>
+      <button class="btn small js-copy" type="button" data-t="${esc(t)}">Copiar</button></div>`).join('');
+
+  const links = (l.links || []).map(k => `<a class="btn" href="${esc(k.url)}" target="_blank" rel="noopener">${ICO.link}${esc(k.label)}</a>`).join('');
+  const stars = [1,2,3,4,5].map(n => `<button type="button" class="js-star ${n <= (e.puntuacion || 0) ? 'on' : ''}" data-v="${n}" aria-label="${n} de 5">★</button>`).join('');
+  const necesitaUbic = !l.lat || l.precision === 'zona' || l.precision === 'sin';
+
+  return `<article class="card${e.visitado ? ' is-visited' : ''}${e.meGusta === 'no' ? ' is-no' : ''}" data-id="${esc(l.id)}" id="lote-${esc(l.id)}">
+    ${fotos}
+    <div class="head">
+      <div><h2>${esc(l.titulo)}</h2><p class="zona">${esc(l.zona)}</p></div>
+      <div class="price"><b class="num">${esc(l.precioTexto)}</b><small class="num">${esc(l.m2Texto)}${porM2 ? ' · ' + porM2 : ''}</small></div>
+    </div>
+    <div class="tags">${tags.join('')}</div>
+    <ul class="svc">${svc}</ul>
+    ${l.descripcion ? `<p class="desc">${esc(l.descripcion)}</p>` : ''}
+    ${(l.alertas || []).length ? `<ul class="alerts">${l.alertas.map(a => `<li>${esc(a)}</li>`).join('')}</ul>` : ''}
+    <div class="contact">
+      <div><span class="who">${esc(c.nombre || 'Sin contacto')}</span>${c.canal ? ` <span class="via">· ${esc(c.canal)}</span>` : ''}</div>
+      ${tels}
+    </div>
+    <div class="btns">
+      <a class="btn primary" href="${urlIr(l)}" target="_blank" rel="noopener">${ICO.go}Cómo llegar</a>
+      <a class="btn" href="${urlVer(l)}" target="_blank" rel="noopener">${ICO.pin}Ver en Maps</a>
+      ${links}
+    </div>
+    <div class="eval">
+      <div class="row">
+        <label class="visit"><input type="checkbox" class="js-visit" id="vis-${esc(l.id)}" ${e.visitado ? 'checked' : ''}>Visitado</label>
+        <div class="seg" role="group" aria-label="¿Me gusta?">
+          <button type="button" class="js-like" data-v="si" aria-pressed="${e.meGusta === 'si'}">Sí</button>
+          <button type="button" class="js-like" data-v="no" aria-pressed="${e.meGusta === 'no'}">No</button>
+        </div>
+      </div>
+      <div class="row"><span class="lbl">Puntuación</span><div class="stars">${stars}</div></div>
+      <textarea class="js-com" id="com-${esc(l.id)}" placeholder="Qué te pareció, qué te dijo el vendedor, precio negociado…">${esc(e.comentario || '')}</textarea>
+      ${necesitaUbic ? `<div class="loc">
+          <input class="js-loc" id="loc-${esc(l.id)}" inputmode="decimal" placeholder="Pegá la ubicación: -33.26, -66.23" value="${e.ubicacion ? esc(e.ubicacion.lat + ', ' + e.ubicacion.lng) : ''}">
+          ${e.ubicacion ? '<button type="button" class="btn small js-loc-clear">Borrar</button>' : ''}
+        </div>
+        <p class="hint">${l.precision === 'zona' ? 'Ahora va en la ruta con una ubicación aproximada de la zona. Si conseguís la exacta, pegala acá.' : 'Con la ubicación, este lote entra en la ruta.'} Sirven coordenadas o un link largo de Google Maps.</p>` : ''}
+    </div>
+  </article>`;
+}
+
+function pintarFiltros(){
+  $('#filtros').innerHTML = FILTROS.map(([k, t]) => `<button type="button" class="chip" data-f="${k}" aria-pressed="${ui.filtro === k}">${t}</button>`).join('');
+  $('#orden').value = ui.orden;
+}
+function pintarLista(){
+  const ls = ordenados();
+  $('#cuenta').textContent = ls.length + (ls.length === 1 ? ' lote' : ' lotes');
+  if(!Object.keys(lotes).length){
+    $('#list').innerHTML = `<p class="empty">${estado === 'conectando' ? 'Cargando los lotes…' : 'Todavía no hay lotes cargados. Pedile a Claude que los cargue.'}</p>`;
+    return;
+  }
+  $('#list').innerHTML = ls.length ? ls.map(card).join('') : '<p class="empty">Ningún lote con este filtro.</p>';
+}
+function repintarCard(id){
+  const el = document.getElementById('lote-' + id);
+  if(el && lotes[id]) el.outerHTML = card(lotes[id]);
+}
+
+/* ---------- Ruta ---------- */
+function paradas(){
+  const items = [];
+  for(const l of Object.values(lotes)){
+    const e = ev(l.id), u = ubic(l);
+    if(!u) continue;
+    if(ui.saltearVisitados && e.visitado) continue;
+    if(ui.saltearNo && e.meGusta === 'no') continue;
+    if(ui.soloPresupuesto && !(l.precioUsd != null && l.precioUsd <= PRESUPUESTO)) continue;
+    if(!ui.incluirAprox && u.precision === 'zona') continue;
+    items.push({l, u});
+  }
+  items.sort((a, b) => (a.l.orden ?? 999) - (b.l.orden ?? 999));
+  const stops = [];
+  for(const it of items){
+    const aprox = it.u.precision === 'zona';
+    const s = stops.find(s => s.aprox === aprox && hav(s, it.u) < 0.3);
+    if(s) s.lotes.push(it.l); else stops.push({lat:it.u.lat, lng:it.u.lng, aprox, lotes:[it.l]});
+  }
+  return ordenar(stops);
+}
+function ordenar(stops){
+  if(stops.length < 2) return stops;
+  const resto = stops.slice(), ruta = []; let cur = ORIGEN;
+  while(resto.length){
+    let bi = 0, bd = Infinity;
+    resto.forEach((s, i) => { const d = hav(cur, s); if(d < bd){ bd = d; bi = i; } });
+    cur = resto.splice(bi, 1)[0]; ruta.push(cur);
+  }
+  const p = [ORIGEN, ...ruta, ORIGEN];
+  let mejoro = true, vueltas = 0;
+  while(mejoro && vueltas++ < 200){
+    mejoro = false;
+    for(let i = 1; i < p.length - 2; i++) for(let k = i + 1; k < p.length - 1; k++){
+      const antes = hav(p[i-1], p[i]) + hav(p[k], p[k+1]);
+      const despues = hav(p[i-1], p[k]) + hav(p[i], p[k+1]);
+      if(despues + 1e-9 < antes){ const seg = p.slice(i, k + 1).reverse(); p.splice(i, seg.length, ...seg); mejoro = true; }
+    }
+  }
+  return p.slice(1, -1);
+}
+const punto = p => p.origen ? ORIGEN.query : p.lat + ',' + p.lng;
+function urlTramo(chunk){
+  const o = chunk[0], d = chunk[chunk.length - 1], w = chunk.slice(1, -1);
+  let u = 'https://www.google.com/maps/dir/?api=1&travelmode=driving&origin=' + encodeURIComponent(punto(o)) + '&destination=' + encodeURIComponent(punto(d));
+  if(w.length) u += '&waypoints=' + encodeURIComponent(w.map(punto).join('|'));
+  return u;
+}
+const nombreParada = s => s.origen ? 'Las Lajas' : s.lotes.map(l => l.titulo).join(' + ');
+
+function esquema(stops){
+  const W = 340, H = 220, pad = 22;
+  const pts = [ORIGEN, ...stops];
+  const cos = Math.cos(-33.27 * Math.PI / 180);
+  const xs = pts.map(p => p.lng * cos), ys = pts.map(p => p.lat);
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  const esc1 = Math.min((W - 2*pad) / Math.max(maxX - minX, 1e-6), (H - 2*pad) / Math.max(maxY - minY, 1e-6));
+  const ox = (W - (maxX - minX) * esc1) / 2, oy = (H - (maxY - minY) * esc1) / 2;
+  const P = p => [ox + (p.lng * cos - minX) * esc1, H - (oy + (p.lat - minY) * esc1)];
+  const linea = [ORIGEN, ...stops, ORIGEN].map(p => P(p).map(v => v.toFixed(1)).join(',')).join(' ');
+  const km5 = 5 * esc1 / 111;  // 5 km en px (aprox. vertical)
+  const nodos = stops.map((s, i) => { const [x, y] = P(s);
+    return s.aprox
+      ? `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="13" fill="var(--warn-soft)" stroke="var(--warn)" stroke-width="1.5" stroke-dasharray="3 2"/><text x="${x.toFixed(1)}" y="${(y + 4).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--warn)">${i + 1}</text>`
+      : `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="9" fill="var(--accent)"/><text x="${x.toFixed(1)}" y="${(y + 4).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--accent-ink)">${i + 1}</text>`; }).join('');
+  const [hx, hy] = P(ORIGEN);
+  return `<svg class="schema" viewBox="0 0 ${W} ${H}" role="img" aria-label="Esquema de la ruta">
+    <polyline points="${linea}" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 4"/>
+    ${nodos}
+    <rect x="${(hx - 9).toFixed(1)}" y="${(hy - 9).toFixed(1)}" width="18" height="18" rx="4" fill="var(--ink)"/>
+    <text x="${hx.toFixed(1)}" y="${(hy + 4).toFixed(1)}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--bg)">L</text>
+    <line x1="12" y1="${H - 12}" x2="${(12 + km5).toFixed(1)}" y2="${H - 12}" stroke="var(--muted)" stroke-width="2"/>
+    <text x="12" y="${H - 17}" font-size="10" fill="var(--muted)">5 km</text>
+  </svg>`;
+}
+
+function pintarRuta(){
+  const stops = paradas();
+  const seq = [{origen:true}, ...stops, {origen:true}];
+  let km = 0; const tramoKm = [];
+  for(let i = 1; i < seq.length; i++){
+    const a = seq[i-1].origen ? ORIGEN : seq[i-1], b = seq[i].origen ? ORIGEN : seq[i];
+    const d = hav(a, b) * KM_RUTA; tramoKm.push(d); km += d;
+  }
+  const chunks = [];
+  for(let i = 0; i < seq.length - 1; i += 4) chunks.push(seq.slice(i, i + 5));
+
+  const lista = seq.map((s, i) => {
+    if(s.origen) return `<li class="stop"><span class="n home">L</span><div><div class="t">${i === 0 ? 'Salida' : 'Vuelta'}: Las Lajas</div><div class="s">Barrio privado, Ruta 7${i ? ' · ' + Math.round(tramoKm[i-1]) + ' km desde la anterior' : ''}</div></div><span></span></li>`;
+    const l0 = s.lotes[0];
+    return `<li class="stop"><span class="n${s.aprox ? ' aprox' : ''}">${i}</span><div><div class="t">${esc(nombreParada(s))}</div><div class="s num">${s.aprox ? '<span class="tag warn">Zona aprox.: preguntá la ubicación exacta</span> ' : ''}${esc(l0.zona)} · ${Math.round(tramoKm[i-1])} km desde la anterior</div></div>
+      <a class="btn small" href="${'https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + encodeURIComponent(s.lat + ',' + s.lng)}" target="_blank" rel="noopener">Ir</a></li>`;
+  }).join('');
+
+  const legs = chunks.map((ch, i) => {
+    const desde = nombreParada(ch[0]).split(' + ')[0], hasta = nombreParada(ch[ch.length - 1]).split(' + ')[0];
+    return `<a class="btn ${i === 0 ? 'primary' : ''}" href="${urlTramo(ch)}" target="_blank" rel="noopener"><span>Tramo ${i + 1}: ${esc(desde)} → ${esc(hasta)}</span><span class="num">${ch.length - 1} ${ch.length - 1 === 1 ? 'parada' : 'paradas'}</span></a>`;
+  }).join('');
+  const completa = stops.length && stops.length <= 9
+    ? `<a class="btn" href="${urlTramo(seq)}" target="_blank" rel="noopener">Ruta completa en un solo link</a><p class="hint">En el celular Google Maps suele aceptar solo 3 paradas intermedias por link; por eso está partida en tramos. Al terminar un tramo, abrí el siguiente.</p>` : '';
+
+  const pendientes = Object.values(lotes).filter(l => !ubic(l)).sort((a, b) => (a.orden ?? 999) - (b.orden ?? 999));
+  const todo = pendientes.map(l => {
+    const c = l.contacto || {};
+    const tels = (c.telefonos || []).map(t => `<div class="phone"><code class="num">${esc(t)}</code><a class="btn small" href="https://wa.me/549${esc(t)}" target="_blank" rel="noopener">WhatsApp</a><button class="btn small js-copy" type="button" data-t="${esc(t)}">Copiar</button></div>`).join('');
+    return `<li><div class="t">${esc(l.titulo)} <span class="num" style="font-weight:400;color:var(--muted)">· ${esc(l.precioTexto)}</span></div>
+      <div class="s">${esc(l.zona)} · ${esc(c.nombre || 'Sin contacto')}${c.canal ? ' (' + esc(c.canal) + ')' : ''}</div>${tels}
+      <div class="btns"><button type="button" class="btn small js-ficha" data-id="${esc(l.id)}">Ver ficha y cargar ubicación</button></div></li>`;
+  }).join('');
+
+  $('#tab-ruta').innerHTML = `
+    <div class="panel">
+      <h2>Recorrido desde Las Lajas</h2>
+      <div class="opts">
+        <label><input type="checkbox" id="o-vis" ${ui.saltearVisitados ? 'checked' : ''}>Saltear los que ya visité</label>
+        <label><input type="checkbox" id="o-no" ${ui.saltearNo ? 'checked' : ''}>Saltear los que marqué "No"</label>
+        <label><input type="checkbox" id="o-pres" ${ui.soloPresupuesto ? 'checked' : ''}>Solo hasta USD 22.000</label>
+        <label><input type="checkbox" id="o-aprox" ${ui.incluirAprox ? 'checked' : ''}>Incluir los de zona aproximada</label>
+      </div>
+      ${stops.length ? `
+        <div class="sum"><div><b class="num">${stops.length}</b><span>paradas</span></div><div><b class="num">≈ ${Math.round(km)} km</b><span>ida y vuelta, estimado</span></div></div>
+        ${esquema(stops)}
+        <div class="legend"><span><i class="dot"></i>Ubicación conocida</span><span><i class="dot aprox"></i>Zona aproximada</span></div>
+        <p class="hint">El orden lo calcula la página para hacer menos kilómetros, saliendo y volviendo a Las Lajas. Las paradas de zona aproximada te llevan al centro de la zona, no al lote: usá las fotos para reconocerlo o preguntá antes. Los km son una estimación; Google Maps te da los reales.</p>
+        <div class="legs">${legs}</div>${completa}
+        <ul class="stops">${lista}</ul>` : '<p class="empty">No quedan lotes con ubicación para recorrer con estos filtros.</p>'}
+    </div>
+    <div class="panel">
+      <h2>Para contactar antes de ir</h2>
+      <p class="hint">De estos no hay ni siquiera una zona. Pedile la ubicación al vendedor, pegala en la ficha y el lote entra solo en la ruta.</p>
+      <ul class="todo">${todo || '<li class="s">Todos los lotes tienen ubicación.</li>'}</ul>
+    </div>`;
+}
+
+/* ---------- Datos ---------- */
+function exportar(){
+  return {
+    exportado:new Date().toISOString(),
+    origen:ORIGEN,
+    lotes:Object.values(lotes).sort((a, b) => (a.orden ?? 999) - (b.orden ?? 999)).map(l => Object.assign({}, l, {evaluacion:ev(l.id)}))
+  };
+}
+function pintarDatos(){ $('#json').textContent = JSON.stringify(exportar(), null, 2); pintarEstado(); }
+
+/* ---------- Render general ---------- */
+function render(){
+  renderPendiente = false;
+  pintarEstado(); pintarStats();
+  document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === ui.tab)));
+  ['lotes','ruta','datos'].forEach(t => $('#tab-' + t).hidden = t !== ui.tab);
+  if(ui.tab === 'lotes'){ pintarFiltros(); pintarLista(); }
+  if(ui.tab === 'ruta') pintarRuta();
+  if(ui.tab === 'datos') pintarDatos();
+}
+function pedirRender(){
+  const a = document.activeElement;
+  if(a && a.closest && a.closest('.card') && (a.tagName === 'TEXTAREA' || a.tagName === 'INPUT')){ renderPendiente = true; pintarEstado(); pintarStats(); return; }
+  render();
+}
+
+/* ---------- Eventos ---------- */
+document.querySelector('.tabs').addEventListener('click', e => {
+  const b = e.target.closest('button[data-tab]'); if(!b) return;
+  ui.tab = b.dataset.tab; guardarUI(); render(); window.scrollTo(0, 0);
+});
+$('#filtros').addEventListener('click', e => {
+  const b = e.target.closest('[data-f]'); if(!b) return;
+  ui.filtro = b.dataset.f; guardarUI(); pintarFiltros(); pintarLista();
+});
+$('#orden').addEventListener('change', e => { ui.orden = e.target.value; guardarUI(); pintarLista(); });
+
+function idDe(el){ const c = el.closest('.card'); return c ? c.dataset.id : null; }
+function parsearUbic(txt){
+  const s = String(txt || '').trim();
+  if(!s) return {vacio:true};
+  if(/maps\.app\.goo\.gl|goo\.gl\/maps/.test(s)) return {corto:true};
+  const m = s.match(/@(-?\d+\.\d+),\s*(-?\d+\.\d+)/) || s.match(/(-?\d{1,2}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)/);
+  if(!m) return {error:true};
+  const lat = parseFloat(m[1]), lng = parseFloat(m[2]);
+  if(lat < -34.5 || lat > -32 || lng < -67.5 || lng > -65) return {lejos:true};
+  return {lat, lng};
+}
+
+document.addEventListener('click', e => {
+  const copy = e.target.closest('.js-copy');
+  if(copy){
+    const t = copy.dataset.t;
+    try{ navigator.clipboard.writeText(t).then(() => toast('Número copiado'), () => toast('Mantené apretado el número para copiarlo')); }
+    catch(err){ toast('Mantené apretado el número para copiarlo'); }
+    return;
+  }
+  const ficha = e.target.closest('.js-ficha');
+  if(ficha){
+    ui.tab = 'lotes'; ui.filtro = 'todos'; guardarUI(); render();
+    const el = document.getElementById('lote-' + ficha.dataset.id);
+    if(el){ el.scrollIntoView({block:'start'}); const inp = el.querySelector('.js-loc'); if(inp) inp.focus({preventScroll:true}); }
+    return;
+  }
+  const like = e.target.closest('.js-like');
+  if(like){ const id = idDe(like); const v = like.dataset.v; guardarEval(id, {meGusta: ev(id).meGusta === v ? null : v}); repintarCard(id); return; }
+  const star = e.target.closest('.js-star');
+  if(star){ const id = idDe(star); const v = Number(star.dataset.v); guardarEval(id, {puntuacion: ev(id).puntuacion === v ? 0 : v}); repintarCard(id); return; }
+  const clr = e.target.closest('.js-loc-clear');
+  if(clr){ const id = idDe(clr); guardarEval(id, {ubicacion:null}); repintarCard(id); toast('Ubicación borrada'); return; }
+});
+
+document.addEventListener('change', e => {
+  const t = e.target;
+  if(t.matches('.js-visit')){
+    const id = idDe(t);
+    guardarEval(id, {visitado:t.checked, visitadoEl:t.checked ? new Date().toISOString().slice(0, 10) : null});
+    repintarCard(id); return;
+  }
+  if(t.matches('.js-loc')){
+    const id = idDe(t), r = parsearUbic(t.value);
+    if(r.vacio){ return; }
+    if(r.corto){ toast('Ese link corto no trae coordenadas. Abrilo, tocá el pin y copiá los números (-33.xx, -66.xx).'); return; }
+    if(r.error){ toast('No encontré coordenadas. Pegá algo como -33.26, -66.23'); return; }
+    if(r.lejos){ toast('Esas coordenadas quedan lejos de San Luis. Revisalas.'); return; }
+    guardarEval(id, {ubicacion:{lat:r.lat, lng:r.lng}}); repintarCard(id); toast('Ubicación guardada: ya entra en la ruta');
+    return;
+  }
+  if(t.id === 'o-vis' || t.id === 'o-no' || t.id === 'o-pres' || t.id === 'o-aprox'){
+    ui.saltearVisitados = $('#o-vis').checked; ui.saltearNo = $('#o-no').checked; ui.soloPresupuesto = $('#o-pres').checked; ui.incluirAprox = $('#o-aprox').checked;
+    guardarUI(); pintarRuta();
+  }
+});
+
+document.addEventListener('input', e => {
+  const t = e.target;
+  if(!t.matches('.js-com')) return;
+  const id = idDe(t);
+  clearTimeout(escribiendo[id]);
+  escribiendo[id] = setTimeout(() => { delete escribiendo[id]; guardarEval(id, {comentario:t.value}); }, 800);
+});
+document.addEventListener('focusout', e => {
+  const t = e.target;
+  if(t.matches && t.matches('.js-com')){
+    const id = idDe(t);
+    if(escribiendo[id]){ clearTimeout(escribiendo[id]); delete escribiendo[id]; guardarEval(id, {comentario:t.value}); }
+  }
+  if(renderPendiente) setTimeout(() => { const a = document.activeElement; if(!(a && a.closest && a.closest('.card') && (a.tagName === 'TEXTAREA' || a.tagName === 'INPUT'))) render(); }, 0);
+});
+
+$('#copiar-json').addEventListener('click', () => {
+  const txt = JSON.stringify(exportar(), null, 2);
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents($('#json')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast('Seleccioné el JSON: copialo con el menú del celular'); };
+  try{ navigator.clipboard.writeText(txt).then(() => toast('JSON copiado'), fallback); }catch(err){ fallback(); }
+});
+
+$('#bajar-json').addEventListener('click', () => {
+  try{
+    const blob = new Blob([JSON.stringify(exportar(), null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'terrenos_' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    toast('JSON descargado');
+  }catch(err){ toast('No se pudo descargar. Probá con "Copiar JSON".'); }
+});
+
+$('#importar-json').addEventListener('change', e => {
+  const f = e.target.files && e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const d = JSON.parse(r.result);
+      let n = 0;
+      (d.lotes || []).forEach(l => {
+        const ent = l.evaluacion;
+        if(!ent || !l.id || !lotes[l.id] || !Object.keys(ent).length) return;
+        const act = evals[l.id];
+        if(!act || (ent.actualizado || '') >= (act.actualizado || '')){ evals[l.id] = ent; n++; }
+      });
+      guardarLocal(); render();
+      toast(n ? 'Importé ' + n + (n === 1 ? ' lote' : ' lotes') : 'No había marcas nuevas para importar');
+    }catch(err){ toast('Ese archivo no es un JSON de esta página'); }
+    e.target.value = '';
+  };
+  r.readAsText(f);
+});
+
+leerLocal();
+render();
+})();
+</script>
+
+</body>
+</html>
